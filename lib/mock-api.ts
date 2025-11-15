@@ -139,10 +139,12 @@ export const mockAuthApi = {
     throw new Error("Invalid credentials")
   },
 
-  signup: async (data: Omit<User, "id" | "createdAt" | "verified">) => {
+  signup: async (data: Omit<User, "id" | "createdAt" | "verified"> & { password: string }) => {
     await new Promise((r) => setTimeout(r, 500))
+    // don't store the password on the public User object in this mock
+    const { password, ...rest } = data
     const user: User = {
-      ...data,
+      ...rest,
       id: "user-" + Date.now(),
       createdAt: new Date().toISOString(),
       verified: false,
